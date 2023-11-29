@@ -9,8 +9,41 @@ export class News extends Component {
         super()
          this.state={
             articles:[],
-            loading:false
+            loading:false,
+            page:1,
+            totalResults:this.totalResults
+            
         }
+    }
+
+    HandleNext=()=>{
+        console.log("Next")
+      
+        let url=`https://newsapi.org/v2/top-headlines?country=in&apiKey=94e7ce318c464d5287b177b1ba37a292&page=${this.state.page + 1}&pageSize=20`;
+            
+        fetch(url).then((res) => res.json())
+            .then((json) => {
+                this.setState({
+                    articles: json.articles,
+                    page:this.state.page+1
+                });
+            });
+    
+        
+    }
+    
+    HandlePrevieus=()=>{
+        console.log("Previus")
+        let url=`https://newsapi.org/v2/top-headlines?country=in&apiKey=94e7ce318c464d5287b177b1ba37a292&page=${this.state.page - 1}&pageSize=20`;
+            
+        fetch(url).then((res) => res.json())
+            .then((json) => {
+                this.setState({
+                    articles: json.articles,
+                    page:this.state.page-1
+                });
+            });
+    
     }
     async componentDidMount() {
             let url="https://newsapi.org/v2/top-headlines?country=in&apiKey=94e7ce318c464d5287b177b1ba37a292";
@@ -19,13 +52,15 @@ export class News extends Component {
             .then((json) => {
                 this.setState({
                     articles: json.articles,
-                    loading: false
+                    loading: false,
+                    totalResults:json.totalResults
                 });
             });
     
     }
   render() {
     return (
+        <>
             <div className='container mt-3 '>
             <h2>News- Top Headings </h2>
             <div className="row">
@@ -37,6 +72,11 @@ export class News extends Component {
        
         </div>
       </div>
+        <div className="container d-flex justify-content-between m-3 ">
+        <button rel="noreferrer" disabled={this.state.page<=1} className="btn btn-primary" onClick={this.HandlePrevieus}>Previus</button>
+        <button  rel="noreferrer"  disabled={this.state.page+1>Math.ceil(this.state.totalResults/21)} className="btn btn-dark" onClick={this.HandleNext}>Next</button>
+        </div>
+      </>
     )
   }
 }
