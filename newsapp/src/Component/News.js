@@ -12,7 +12,7 @@ export class News extends Component {
         super(props)
          this.state={
             articles:[],    
-            loading:true,
+            loading:false,
             page:1,
             totalResults:this.totalResults
             
@@ -31,13 +31,9 @@ export class News extends Component {
     
 
         fetchMoreData=async()=>{
-
-        this.setState({
-            page:this.state.page+1
-        })
-        
+  this.setState({page:this.state.page+1})
         let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=94e7ce318c464d5287b177b1ba37a292&page=${this.state.page}&pageSize=${this.props.pagesize}`;
-        // this.setState({loading:true})
+        
         fetch(url).then((res) => res.json())
             .then((json) => {
                 this.setState({
@@ -50,7 +46,7 @@ export class News extends Component {
       }
       async UpdateNews(){
         let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=94e7ce318c464d5287b177b1ba37a292&page=${this.state.page}&pageSize=${this.props.pagesize}`;
-        this.setState({loading:true})
+        // this.setState({loading:true})
         fetch(url).then((res) => res.json())
             .then((json) => {
                 this.setState({
@@ -121,25 +117,26 @@ export class News extends Component {
   render() {
     return (
         <>
+        <h2 className='h2 text-center mb-3'>News- Top {this.capitallize(this.props.category)} Headings </h2>
+           
+           {this.state.loading && <Spinner/>}
             <InfiniteScroll
       dataLength={this.state.articles.length}
       next={this.fetchMoreData}
       hasMore={this.state.articles.length!==this.state.totalResults}
-      loader={<Spinner />}
+      loader={<Spinner/>}
     >
         
-            <div className='container'/>
+            <div className='container'>
             <div className="row">
-            <h2 className='h2 text-center mb-3'>News- Top {this.capitallize(this.props.category)} Headings </h2>
-            <div className='conatainer '/>
-            {this.state.articles.map((element)=>{
+            
+                      {this.state.articles.map((element)=>{
                 return<div className="col-md-4 " key={element.url} >
             <NewsItem  title={element.title?element.title.slice(0,45):""} description={element.description?element.description.slice(0,88):""} newsUrl={element.url} imageUrl={element.urlToImage} author={element.author} newsdate={element.publishedAt} source={element.source.name}/>
             </div>
-        
         })}
-       </div>
-        
+        </div> 
+        </div>
         </InfiniteScroll>
           {/* <div className="container d-flex justify-content-between m-3 ">
         <button rel="noreferrer" disabled={this.state.page<=1} className="btn btn-dark" onClick={this.HandlePrevieus}>Previus</button>
