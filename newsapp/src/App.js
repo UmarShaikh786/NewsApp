@@ -4,20 +4,48 @@ import React, { Component } from "react";
 import Navbar from "./Component/Navbar";
 import News from "./Component/News";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import LoadingBar from 'react-top-loading-bar'
 
 export class App extends Component {
   pagesize=6;
+  apikey=process.env.REACT_APP_NEWS_API;
+  state={
+    progress:0
+  }
+  setProgress=(progress)=>{
+    this.setState({progress:progress})
+  }
   render() {
+
     return (
       <div>
         <Router>
           <Navbar />
+        <LoadingBar
+        height={3}
+        color='#f11946'
+        progress={this.state.progress}
+       
+             />
           <Routes>
-            <Route exact path="/"
+
+          <Route exact path="/"
+            
+            element=
+            {
+             <News progress={this.setProgress}  apikey={this.apikey} 
+                key="general"
+                pagesize={this.pagesize}
+                category="general"
+                country="in"
+              />
+            }
+          />
+            <Route exact path="/general"
             
               element=
               {
-                <News
+               <News progress={this.setProgress}  apikey={this.apikey} 
                   key="general"
                   pagesize={this.pagesize}
                   category="general"
@@ -29,7 +57,8 @@ export class App extends Component {
               
               element=
               {
-                <News
+                <News 
+                  progress={this.setProgress}  apikey={this.apikey} 
                   key="business"
                   pagesize={this.pagesize}
                   category="business"
@@ -41,7 +70,7 @@ export class App extends Component {
               
               element=
               {
-                <News
+                <News progress={this.setProgress}  apikey={this.apikey} 
                   key="technology"
                   pagesize={this.pagesize}
                   category="technology"
@@ -53,7 +82,7 @@ export class App extends Component {
               
               element=
               {
-                <News
+                <News progress={this.setProgress}  apikey={this.apikey} 
                   key="sports"
                   pagesize={this.pagesize}
                   category="sports"
@@ -65,7 +94,7 @@ export class App extends Component {
               
               element=
               {
-                <News
+                <News progress={this.setProgress}  apikey={this.apikey} 
                   key="science"
                   pagesize={this.pagesize}
                   category="science"
@@ -77,7 +106,7 @@ export class App extends Component {
               
               element=
               {
-                <News
+                <News progress={this.setProgress}  apikey={this.apikey} 
                   key="entertainment"
                   pagesize={this.pagesize}
                   category="entertainment"
@@ -89,7 +118,7 @@ export class App extends Component {
               
               element=
               {
-                <News
+                <News progress={this.setProgress}  apikey={this.apikey} 
                   key="health"
                   pagesize={this.pagesize}
                   category="health"

@@ -14,7 +14,8 @@ export class News extends Component {
             articles:[],    
             loading:false,
             page:1,
-            totalResults:this.totalResults
+            totalResults:this.totalResults,
+            toploading:this.props.progress
             
         }
         document.title=`${this.capitallize(this.props.category)} -Kayamat-Tak News`
@@ -32,7 +33,7 @@ export class News extends Component {
 
         fetchMoreData=async()=>{
   this.setState({page:this.state.page+1})
-        let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=94e7ce318c464d5287b177b1ba37a292&page=${this.state.page}&pageSize=${this.props.pagesize}`;
+        let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page + 1}&pageSize=${this.props.pagesize}`;
         
         fetch(url).then((res) => res.json())
             .then((json) => {
@@ -45,9 +46,12 @@ export class News extends Component {
         
       }
       async UpdateNews(){
-        let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=94e7ce318c464d5287b177b1ba37a292&page=${this.state.page}&pageSize=${this.props.pagesize}`;
+        this.props.progress(30)
+        let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page}&pageSize=${this.props.pagesize}`;
         // this.setState({loading:true})
-        fetch(url).then((res) => res.json())
+        this.props.progress(70)
+        fetch(url).then((res) => res.json()) 
+         
             .then((json) => {
                 this.setState({
                     articles: json.articles,
@@ -56,7 +60,7 @@ export class News extends Component {
                 });
             });
     
-
+            this.props.progress(100)
       }
     HandleNext=()=>{
         console.log("Next")
